@@ -1,5 +1,6 @@
-// src/components/JobList.js
+import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import JobCard from './JobCard'; // Import JobCard component
 
 const JobList = ({ jobs, loadMore }) => {
   return (
@@ -14,3 +15,4 @@ const JobList = ({ jobs, loadMore }) => {
     </InfiniteScroll>
   );
 };
+export default JobList;

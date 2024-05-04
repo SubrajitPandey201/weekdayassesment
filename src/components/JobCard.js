@@ -1,6 +1,6 @@
 // src/components/JobCard.js
 import React from 'react';
-import { Card, CardContent, Typography, Button } from '@material-ui/core';
+import { Card, CardContent, Typography, Button } from '@mui/material';
 
 const JobCard = ({ job }) => {
   return (
