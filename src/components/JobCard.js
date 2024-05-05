@@ -105,7 +105,7 @@ export const JobCard = ({
                   </button>
                   <button
                     type="submit"
-                    className="group flex items-center justify-center gap-2 h-[2rem] w-[14rem] max-w-full bg-blue-500 text-white font-medium rounded-xl outline-none transition-all focus:scale-110 hover:scale-110 hover:bg-blue-600  active:scale-105"
+                    className="group flex items-center justify-center gap-2 h-[2rem] w-[14rem] max-w-full bg-blue-300 text-white font-medium rounded-xl outline-none transition-all focus:scale-110 hover:scale-110 hover:bg-blue-600  active:scale-105"
                   >
                     🧔🏼 Ask for refferal {" "}
                     <FaPaperPlane className="text-xs opacity-70 transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />{" "}
