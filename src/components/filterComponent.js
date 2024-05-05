@@ -122,25 +122,9 @@ const FilterComponent = ({ onFilterChange }) => {
               label="Number of Employee"
               type="number"
               name="Number of Employee"
-              value={filter.MinNumofexperience} // Display selected minExperience
-              onChange={handleChange}
+              value={filter.MinNumofexperience}
             />
           </Box>
-          {/* <FormControlLabel
-            control={<Checkbox />}
-            label="Remote/On-site"
-            name="remoteOnSite"
-            checked={filter.remoteOnSite} // Display selected remoteOnSite
-            onChange={handleChange}
-          />
-  
-          <FormControlLabel
-            control={<Checkbox />}
-            label="Tech Stack"
-            name="techStack"
-            checked={filter.techStack} // Display selected techStack
-            onChange={handleChange}
-          /> */}
   
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
