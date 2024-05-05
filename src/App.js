@@ -1,36 +1,159 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobs } from './redux/action/jobActions';
-import JobList from './components/JobList';
+import React, { useEffect, useState, useRef } from "react";
+import "./App.css";
+import { JobCard } from "./components/JobCard";
+import FilterComponent from "./components/filterComponent";
 
-const App = () => {
-  const dispatch = useDispatch();
-  const jobs = useSelector((state) => state.jobs);
-  const loading = useSelector((state) => state.loading);
-  const error = useSelector((state) => state.error);
+function App() {
+  const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [filters, setFilters] = useState({
+    role: "",
+    location: "",
+    companyName: "",
+    minExp: "", // Changed to minExp for consistency
+    minBasePay: "", // Changed to minBasePay for consistency
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const limit = 6;
+
+  const observer = useRef(null);
+  const lastJobRef = useRef(null);
 
   useEffect(() => {
-    dispatch(fetchJobs());
-  }, [dispatch]);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-  const loadMore = () => {
-    // Implement logic to load more jobs
+    const raw = JSON.stringify({
+      limit,
+      offset,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+
+    setLoading(true);
+    fetch(
+      "https://api.weekday.technology/adhoc/getSampleJdJSON",
+      requestOptions
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch jobs");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // console.log("Fetched jobs:", data); // Print fetched jobs
+        setJobs((prevJobs) => [...prevJobs, ...data.jdList]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, [offset]);
+
+  useEffect(() => {
+    setFilteredJobs(
+      jobs.filter((job) => {
+        return (
+          (filters.role === "" || job.jobRole === filters.role) &&
+          (filters.location === "" || job.location === filters.location) &&
+          (filters.companyName === "" ||
+            job.companyName
+              .toLowerCase()
+              .includes(filters.companyName.toLowerCase())) &&
+          (filters.minExperience === "" ||
+            filters.minExperience === null ||
+            filters.minExperience === undefined ||
+            job.minExp >= parseInt(filters.minExperience, 10)) &&
+          (filters.minBasePay === "" ||
+            job.minJdSalary >= parseInt(filters.minBasePay, 10))
+        );
+      })
+    );
+    // console.log("Filtered jobs for experience:", filteredJobs);
+    // console.log(
+    //   "Filtered jobs for experience:",
+    //   filteredJobs.map((job) => ({
+    //     jobRole: job.jobRole,
+    //     location: job.location,
+    //     minExp: job.minExp,
+    //   }))
+    // );
+  }, [filters, jobs]);
+
+  // Print filtered jobs with minExperience greater than user-entered value and Min Base Salary
+  // console.log(
+  //   "Filtered jobs with minExperience greater than user-entered value and Min Base Salary:",
+  //   filteredJobs
+  //     .filter((job) => job.minExp > parseInt(filters.minExp, 10))
+  //     .map((job) => ({ minExp: job.minExp, minJdSalary: job.minJdSalary }))
+  // );
+
+  const handleFilterChange = (name, value) => {
+    setFilters({
+      ...filters,
+      [name]: value,
+    });
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleObserver = (entries) => {
+    const target = entries[0];
+    if (target.isIntersecting) {
+      setOffset((prevOffset) => prevOffset + limit);
+    }
+  };
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "200px",
+      threshold: 1.0,
+    };
+    observer.current = new IntersectionObserver(handleObserver, options);
+  }, []);
+
+  useEffect(() => {
+    if (lastJobRef.current) {
+      observer.current.observe(lastJobRef.current);
+    }
+  }, [filteredJobs]);
+
+  // console.log("Jobs:", jobs); // Print jobs
+  // console.log("Filtered jobs:", filteredJobs); // Print filtered jobs
 
   return (
     <div className="App">
-      <h1>Job Search Dashboard</h1>
-      <JobList jobs={jobs} loadMore={loadMore} />
+      <FilterComponent onFilterChange={handleFilterChange} />
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 max-w-full px-36">
+        {filteredJobs.map((job, index) => (
+          <div
+            className="w-full"
+            key={job.jdUid}
+            ref={index === filteredJobs.length - 1 ? lastJobRef : null}
+          >
+            <JobCard
+              compLogo={job.logoUrl}
+              companyName={job.companyName}
+              jobRole={job.jobRole}
+              location={job.location}
+              description={job.jobDetailsFromCompany}
+              minExp={job.minExp}
+              minJdSalary={job.minJdSalary}
+              maxJdSalary={job.maxJdSalary}
+            />
+          </div>
+        ))}
+      </div>
+      {loading && <p>Loading...</p>}
     </div>
   );
-};
+}
 
 export default App;
