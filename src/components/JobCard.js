@@ -68,7 +68,7 @@ export const JobCard = ({
               </div>
               <div className="flex flex-col  mt-2 ">
                 <p className="text-[0.75rem] font-semibold flex items-center gap-1 text-neutral-600">
-                  Estimated Salary: {formatSalary} 💸
+                  Estimated Salary: {formatSalary} ✅
                 </p>
                 <div className="flex flex-col items-start mb-2">
                   <p className="text-[0.65rem] font-medium text-neutral-400">
@@ -95,12 +95,19 @@ export const JobCard = ({
                 </button>
               </div>
               <div className="flex items-center mt-4">
-                <div>
+                <div className="flex flex-col gap-5">
                   <button
                     type="submit"
                     className="group flex items-center justify-center gap-2 h-[2rem] w-[14rem] max-w-full bg-[#54efc4] text-black font-medium rounded-xl outline-none transition-all focus:scale-110 hover:scale-110 hover:bg-[#7ddfc4]  active:scale-105"
                   >
-                    Easy Apply{" "}
+                    ⚡️ Easy Apply{" "}
+                    <FaPaperPlane className="text-xs opacity-70 transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />{" "}
+                  </button>
+                  <button
+                    type="submit"
+                    className="group flex items-center justify-center gap-2 h-[2rem] w-[14rem] max-w-full bg-blue-500 text-white font-medium rounded-xl outline-none transition-all focus:scale-110 hover:scale-110 hover:bg-blue-600  active:scale-105"
+                  >
+                    🧔🏼 Ask for refferal {" "}
                     <FaPaperPlane className="text-xs opacity-70 transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />{" "}
                   </button>
                 </div>
