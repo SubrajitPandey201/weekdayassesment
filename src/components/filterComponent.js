@@ -99,7 +99,33 @@ const FilterComponent = ({ onFilterChange }) => {
             value={filter.companyName} // Display selected companyName
             onChange={handleChange}
           />
-  
+  <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="role-label">Mode</InputLabel>
+              <Select
+                name="workmode"
+                labelId="work-Mode"
+                label="mode"
+                value={filter.mode}
+                onChange={handleChange}
+              >
+                <MenuItem value="">Select</MenuItem>
+                <MenuItem value={"Remote"}>Remote</MenuItem>
+                <MenuItem value={"OnSite"}>Onsite</MenuItem>
+                <MenuItem value={"Hybrid"}>Hybrid</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Box sx={{ minWidth: 120 }}>
+            <TextField
+              label="Number of Employee"
+              type="number"
+              name="Number of Employee"
+              value={filter.MinNumofexperience} // Display selected minExperience
+              onChange={handleChange}
+            />
+          </Box>
           {/* <FormControlLabel
             control={<Checkbox />}
             label="Remote/On-site"
